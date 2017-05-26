@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Bill;
+use App\House;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreBillsRequest;
@@ -22,7 +24,22 @@ class BillsController extends Controller
             return abort(401);
         }
 
-        $bills = Bill::all();
+        $user = Auth::user();
+        if ($user->isAdmin()){
+            $bills = Bill::all();
+        }
+
+        if ($user->isLandlord()){
+            $house = House::where('landlord_id', $user->id)->pluck('id');
+            $bills = Bill::whereIn('house_id', $house)->get();
+        }
+
+        if ($user->isTenant()){
+            $house = House::where('tenant_id', $user->id)->pluck('id');
+
+            $bills = Bill::where('house_id', $house)->get();
+        }
+
 
         return view('admin.bills.index', compact('bills'));
     }

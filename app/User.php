@@ -48,6 +48,31 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
     
-    
+    public function isAdmin()
+    {
+        if($this->role_id == 1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public function isLandlord()
+    {
+        if($this->role_id == 2){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isTenant()
+    {
+        if($this->role_id == 3){
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 }

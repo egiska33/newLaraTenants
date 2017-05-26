@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\House;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreHousesRequest;
@@ -22,7 +23,18 @@ class HousesController extends Controller
             return abort(401);
         }
 
-        $houses = House::all();
+        $user = Auth::user();
+        if ($user->isAdmin()){
+            $houses = House::all();
+        }
+
+        if ($user->isLandlord()){
+            $houses = House::where('landlord_id', $user->id)->get();
+        }
+
+        if ($user->isTenant()){
+            $houses = House::where('tenant_id', $user->id)->get();
+        }
 
         return view('admin.houses.index', compact('houses'));
     }
