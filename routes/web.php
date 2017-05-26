@@ -38,3 +38,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('documents_mass_destroy', ['uses' => 'Admin\DocumentsController@massDestroy', 'as' => 'documents.mass_destroy']);
 
 });
+Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
+    Route::get('/houses/create', 'Admin\HousesController@create')->name('landlord.houses.create');
+    Route::post('/houses/store', 'Admin\HousesController@store')->name('landlord.houses.store');
+});

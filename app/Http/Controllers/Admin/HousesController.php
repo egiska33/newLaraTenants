@@ -10,8 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreHousesRequest;
 use App\Http\Requests\Admin\UpdateHousesRequest;
 
-class HousesController extends Controller
-{
+class HousesController extends Controller {
+
     /**
      * Display a listing of House.
      *
@@ -19,20 +19,24 @@ class HousesController extends Controller
      */
     public function index()
     {
-        if (! Gate::allows('house_access')) {
+        if (! Gate::allows('house_access'))
+        {
             return abort(401);
         }
 
         $user = Auth::user();
-        if ($user->isAdmin()){
+        if ($user->isAdmin())
+        {
             $houses = House::all();
         }
 
-        if ($user->isLandlord()){
+        if ($user->isLandlord())
+        {
             $houses = House::where('landlord_id', $user->id)->get();
         }
 
-        if ($user->isTenant()){
+        if ($user->isTenant())
+        {
             $houses = House::where('tenant_id', $user->id)->get();
         }
 
@@ -46,28 +50,51 @@ class HousesController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('house_create')) {
+        if (! Gate::allows('house_create'))
+        {
             return abort(401);
         }
-        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');$tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
 
-        return view('admin.houses.create', compact('landlords', 'tenants'));
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+            $tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+
+            return view('admin.houses.create', compact('landlords', 'tenants'));
+        }
+
+        if ($user->isLandlord())
+        {
+            return view('landlord.houses.create');
+        }
+
     }
 
     /**
      * Store a newly created House in storage.
      *
-     * @param  \App\Http\Requests\StoreHousesRequest  $request
+     * @param  \App\Http\Requests\StoreHousesRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreHousesRequest $request)
     {
-        if (! Gate::allows('house_create')) {
+        if (! Gate::allows('house_create'))
+        {
             return abort(401);
         }
-        $house = House::create($request->all());
 
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $house = House::create($request->all());
+        }
 
+        if ($user->isLandlord())
+        {
+            $house = House::create($request->all());
+
+        }
 
         return redirect()->route('admin.houses.index');
     }
@@ -76,15 +103,17 @@ class HousesController extends Controller
     /**
      * Show the form for editing House.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (! Gate::allows('house_edit')) {
+        if (! Gate::allows('house_edit'))
+        {
             return abort(401);
         }
-        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');$tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+        $tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
 
         $house = House::findOrFail($id);
 
@@ -94,18 +123,18 @@ class HousesController extends Controller
     /**
      * Update House in storage.
      *
-     * @param  \App\Http\Requests\UpdateHousesRequest  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\UpdateHousesRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateHousesRequest $request, $id)
     {
-        if (! Gate::allows('house_edit')) {
+        if (! Gate::allows('house_edit'))
+        {
             return abort(401);
         }
         $house = House::findOrFail($id);
         $house->update($request->all());
-
 
 
         return redirect()->route('admin.houses.index');
@@ -115,15 +144,21 @@ class HousesController extends Controller
     /**
      * Display House.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        if (! Gate::allows('house_view')) {
+        if (! Gate::allows('house_view'))
+        {
             return abort(401);
         }
-        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');$tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');$messages = \App\Message::where('house_id', $id)->get();$documents = \App\Document::where('house_id', $id)->get();$bills = \App\Bill::where('house_id', $id)->get();$tasks = \App\Task::where('house_id', $id)->get();
+        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+        $tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+        $messages = \App\Message::where('house_id', $id)->get();
+        $documents = \App\Document::where('house_id', $id)->get();
+        $bills = \App\Bill::where('house_id', $id)->get();
+        $tasks = \App\Task::where('house_id', $id)->get();
 
         $house = House::findOrFail($id);
 
@@ -134,12 +169,13 @@ class HousesController extends Controller
     /**
      * Remove House from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if (! Gate::allows('house_delete')) {
+        if (! Gate::allows('house_delete'))
+        {
             return abort(401);
         }
         $house = House::findOrFail($id);
@@ -155,13 +191,16 @@ class HousesController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (! Gate::allows('house_delete')) {
+        if (! Gate::allows('house_delete'))
+        {
             return abort(401);
         }
-        if ($request->input('ids')) {
+        if ($request->input('ids'))
+        {
             $entries = House::whereIn('id', $request->input('ids'))->get();
 
-            foreach ($entries as $entry) {
+            foreach ($entries as $entry)
+            {
                 $entry->delete();
             }
         }
