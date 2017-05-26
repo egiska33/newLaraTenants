@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\House;
 use App\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMessagesRequest;
@@ -23,14 +25,30 @@ class MessagesController extends Controller
         if (! Gate::allows('message_access')) {
             return abort(401);
         }
-        if ($filterBy = Input::get('filter')) {
-            if ($filterBy == 'all') {
-                Session::put('Message.filter', 'all');
-            } elseif ($filterBy == 'my') {
-                Session::put('Message.filter', 'my');
-            }
+//        if ($filterBy = Input::get('filter')) {
+//            if ($filterBy == 'all') {
+//                Session::put('Message.filter', 'all');
+//            } elseif ($filterBy == 'my') {
+//                Session::put('Message.filter', 'my');
+//            }
+//        }
+
+        $user = Auth::user();
+        if($user->isAdmin()){
+            $messages = Message::all();
         }
-        $messages = Message::all();
+
+
+        if($user->isLandlord()){
+            $house = House::where('landlord_id', $user->id)->pluck('id');
+            $messages = Message::whereIn('house_id', $house)->get();
+        }
+
+        if ($user->isTenant())
+        {
+            $house = House::where('tenant_id', $user->id)->pluck('id');
+            $messages = Message::whereIn('house_id', $house)->get();
+        }
 
         return view('admin.messages.index', compact('messages'));
     }
