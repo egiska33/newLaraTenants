@@ -28,19 +28,24 @@ class HousesController extends Controller {
         if ($user->isAdmin())
         {
             $houses = House::all();
+            return view('admin.houses.index', compact('houses'));
+
         }
 
         if ($user->isLandlord())
         {
             $houses = House::where('landlord_id', $user->id)->get();
+
+            return view ('landlord.houses.index', compact('houses'));
         }
 
         if ($user->isTenant())
         {
             $houses = House::where('tenant_id', $user->id)->get();
+            return view ('landlord.houses.index', compact('houses'));
+
         }
 
-        return view('admin.houses.index', compact('houses'));
     }
 
     /**
@@ -88,15 +93,16 @@ class HousesController extends Controller {
         if ($user->isAdmin())
         {
             $house = House::create($request->all());
+            return redirect()->route('admin.houses.index');
+
         }
 
         if ($user->isLandlord())
         {
             $house = House::create($request->all());
-
+            return redirect()->route('admin.houses.index');
         }
 
-        return redirect()->route('admin.houses.index');
     }
 
 
@@ -153,16 +159,42 @@ class HousesController extends Controller {
         {
             return abort(401);
         }
-        $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
-        $tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
-        $messages = \App\Message::where('house_id', $id)->get();
-        $documents = \App\Document::where('house_id', $id)->get();
-        $bills = \App\Bill::where('house_id', $id)->get();
-        $tasks = \App\Task::where('house_id', $id)->get();
 
-        $house = House::findOrFail($id);
+        $user = Auth::user();
+        if($user->isAdmin()){
+            $landlords = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+            $tenants = \App\User::get()->pluck('name', 'id')->prepend('Please select', '');
+            $messages = \App\Message::where('house_id', $id)->get();
+            $documents = \App\Document::where('house_id', $id)->get();
+            $bills = \App\Bill::where('house_id', $id)->get();
+            $tasks = \App\Task::where('house_id', $id)->get();
 
-        return view('admin.houses.show', compact('house', 'messages', 'documents', 'bills', 'tasks'));
+            $house = House::findOrFail($id);
+
+            return view('admin.houses.show', compact('house', 'messages', 'documents', 'bills', 'tasks'));
+        }
+
+        if($user->isLandlord()){
+            $messages = \App\Message::where('house_id', $id)->get();
+            $documents = \App\Document::where('house_id', $id)->get();
+            $bills = \App\Bill::where('house_id', $id)->get();
+            $tasks = \App\Task::where('house_id', $id)->get();
+
+            $house = House::findOrFail($id);
+
+            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks'));
+        }
+        if($user->isTenant()){
+            $messages = \App\Message::where('house_id', $id)->get();
+            $documents = \App\Document::where('house_id', $id)->get();
+            $bills = \App\Bill::where('house_id', $id)->get();
+            $tasks = \App\Task::where('house_id', $id)->get();
+
+            $house = House::findOrFail($id);
+
+            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks'));
+        }
+
     }
 
 

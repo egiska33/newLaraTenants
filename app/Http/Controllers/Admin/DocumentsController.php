@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Document;
+use App\House;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreDocumentsRequest;
 use App\Http\Requests\Admin\UpdateDocumentsRequest;
 use App\Http\Controllers\Traits\FileUploadTrait;
 
-class DocumentsController extends Controller
-{
+class DocumentsController extends Controller {
+
     use FileUploadTrait;
 
     /**
@@ -21,11 +23,28 @@ class DocumentsController extends Controller
      */
     public function index()
     {
-        if (! Gate::allows('document_access')) {
+        if (! Gate::allows('document_access'))
+        {
             return abort(401);
         }
 
-        $documents = Document::all();
+        $user = Auth::user();
+        if ($user->isAdmin())
+        {
+            $documents = Document::all();
+
+        }
+
+        if ($user->isLandlord()) ;
+        {
+            $house = House::where('landlord_id', $user->id)->pluck('id');
+            $documents = Document::whereIn('house_id', $house)->get();
+        }
+
+        if($user->isTenant()){
+            $house = House::where('tenant_id', $user->id)->pluck('id');
+            $documents = Document::whereIn('house_id', $house)->get();
+        }
 
         return view('admin.documents.index', compact('documents'));
     }
@@ -37,7 +56,8 @@ class DocumentsController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('document_create')) {
+        if (! Gate::allows('document_create'))
+        {
             return abort(401);
         }
         $houses = \App\House::get()->pluck('city', 'id')->prepend('Please select', '');
@@ -48,17 +68,17 @@ class DocumentsController extends Controller
     /**
      * Store a newly created Document in storage.
      *
-     * @param  \App\Http\Requests\StoreDocumentsRequest  $request
+     * @param  \App\Http\Requests\StoreDocumentsRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreDocumentsRequest $request)
     {
-        if (! Gate::allows('document_create')) {
+        if (! Gate::allows('document_create'))
+        {
             return abort(401);
         }
         $request = $this->saveFiles($request);
         $document = Document::create($request->all());
-
 
 
         return redirect()->route('admin.documents.index');
@@ -68,12 +88,13 @@ class DocumentsController extends Controller
     /**
      * Show the form for editing Document.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (! Gate::allows('document_edit')) {
+        if (! Gate::allows('document_edit'))
+        {
             return abort(401);
         }
         $houses = \App\House::get()->pluck('city', 'id')->prepend('Please select', '');
@@ -86,19 +107,19 @@ class DocumentsController extends Controller
     /**
      * Update Document in storage.
      *
-     * @param  \App\Http\Requests\UpdateDocumentsRequest  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\UpdateDocumentsRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateDocumentsRequest $request, $id)
     {
-        if (! Gate::allows('document_edit')) {
+        if (! Gate::allows('document_edit'))
+        {
             return abort(401);
         }
         $request = $this->saveFiles($request);
         $document = Document::findOrFail($id);
         $document->update($request->all());
-
 
 
         return redirect()->route('admin.documents.index');
@@ -108,12 +129,13 @@ class DocumentsController extends Controller
     /**
      * Display Document.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        if (! Gate::allows('document_view')) {
+        if (! Gate::allows('document_view'))
+        {
             return abort(401);
         }
         $document = Document::findOrFail($id);
@@ -125,12 +147,13 @@ class DocumentsController extends Controller
     /**
      * Remove Document from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if (! Gate::allows('document_delete')) {
+        if (! Gate::allows('document_delete'))
+        {
             return abort(401);
         }
         $document = Document::findOrFail($id);
@@ -146,13 +169,16 @@ class DocumentsController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (! Gate::allows('document_delete')) {
+        if (! Gate::allows('document_delete'))
+        {
             return abort(401);
         }
-        if ($request->input('ids')) {
+        if ($request->input('ids'))
+        {
             $entries = Document::whereIn('id', $request->input('ids'))->get();
 
-            foreach ($entries as $entry) {
+            foreach ($entries as $entry)
+            {
                 $entry->delete();
             }
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,6 +25,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+
+        if($user->isAdmin()){
+            return view('home');
+
+        }
+
+        if ($user->isLandlord()){
+            return view ('welcome');
+        }
+
+        if ($user->isTenant()){
+            return view ('welcome');
+        }
     }
 }
