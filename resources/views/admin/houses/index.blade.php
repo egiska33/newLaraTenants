@@ -4,10 +4,10 @@
     <h3 class="page-title">@lang('quickadmin.house.title')</h3>
     @can('house_create')
         <p>
-            @if(Auth::user()->isAdmin)
+            @if(Auth::user()->isAdmin())
                 <a href="{{ route('admin.houses.create') }}" class="btn btn-success">@lang('quickadmin.qa_add_new')</a>
             @endif
-            @if(Auth::user()->isLandlord)
+            @if(Auth::user()->isLandlord())
                     <a href="{{ route('landlord.houses.create') }}" class="btn btn-success">@lang('quickadmin.qa_add_new')</a>
             @endif
         </p>
