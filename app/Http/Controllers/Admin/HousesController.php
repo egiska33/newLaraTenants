@@ -28,7 +28,6 @@ class HousesController extends Controller {
         if ($user->isAdmin())
         {
             $houses = House::all();
-            return view('admin.houses.index', compact('houses'));
 
         }
 
@@ -36,15 +35,14 @@ class HousesController extends Controller {
         {
             $houses = House::where('landlord_id', $user->id)->get();
 
-            return view ('landlord.houses.index', compact('houses'));
         }
 
         if ($user->isTenant())
         {
             $houses = House::where('tenant_id', $user->id)->get();
-            return view ('landlord.houses.index', compact('houses'));
 
         }
+        return view ('admin.houses.index', compact('houses'));
 
     }
 
