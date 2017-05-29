@@ -35,13 +35,14 @@ class DocumentsController extends Controller {
 
         }
 
-        if ($user->isLandlord()) ;
+        if ($user->isLandlord())
         {
             $house = House::where('landlord_id', $user->id)->pluck('id');
             $documents = Document::whereIn('house_id', $house)->get();
         }
 
-        if($user->isTenant()){
+        if ($user->isTenant())
+        {
             $house = House::where('tenant_id', $user->id)->pluck('id');
             $documents = Document::whereIn('house_id', $house)->get();
         }
