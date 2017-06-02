@@ -1,0 +1,27 @@
+.custom{
+    height: 200px;
+    position: absolute;
+    border-radius: 25px !important;
+    width: -webkit-fill-available;
+}
+.ActiveHouse {
+    background-color: #21cc65;
+}
+.InactiveHouse {
+    background-color: #cccac9;
+}
+.houseContainer{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.house {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 110px !important;
+}
+.customText{
+    margin-top: 80px;
+}
+.customContainer{
+    margin: 0 39px
+}
