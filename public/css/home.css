@@ -4,6 +4,11 @@
     border-radius: 25px !important;
     width: -webkit-fill-available;
 }
+.custom:hover{
+    -webkit-box-shadow: 0 0 30px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 0 30px 0 rgba(0,0,0,0.75);
+    box-shadow: 0 0 30px 0 rgba(0,0,0,0.75);
+}
 .ActiveHouse {
     background-color: #21cc65;
 }
