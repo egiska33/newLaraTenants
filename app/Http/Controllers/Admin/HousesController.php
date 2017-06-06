@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\House;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -179,8 +180,9 @@ class HousesController extends Controller {
             $tasks = \App\Task::where('house_id', $id)->get();
 
             $house = House::findOrFail($id);
-
-            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks'));
+            $tenant = User::Where('id', $house->tenant_id)->get();
+//            dd(empty($tenant));
+            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks', 'tenant'));
         }
         if($user->isTenant()){
             $messages = \App\Message::where('house_id', $id)->get();
