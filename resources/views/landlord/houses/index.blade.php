@@ -13,7 +13,7 @@
     <div class="row">
         @foreach($houses as $house)
             <div class="col-md-3 customContainer">
-                <a class="btn custom @if($house->tenant_id == null) InactiveHouse @else ActiveHouse @endif" href="{{route('view.house')}}">
+                <a class="btn custom @if($house->tenant_id == null) InactiveHouse @else ActiveHouse @endif" href="{{route('landlord.house.show',$house->id)}}">
                     <div class="houseContainer"><i class="fa fa-university house" aria-hidden="true"></i></div>
                     <br>
                     <div class="customText">{{$house->address}}</div>
