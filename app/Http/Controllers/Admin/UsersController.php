@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\House;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUsersRequest;
 use App\Http\Requests\Admin\UpdateUsersRequest;
 
-class UsersController extends Controller
-{
+class UsersController extends Controller {
+
     /**
      * Display a listing of User.
      *
@@ -18,7 +20,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        if (! Gate::allows('user_access')) {
+        if (! Gate::allows('user_access'))
+        {
             return abort(401);
         }
 
@@ -34,42 +37,64 @@ class UsersController extends Controller
      */
     public function create()
     {
-        if (! Gate::allows('user_create')) {
+        if (! Gate::allows('user_create'))
+        {
             return abort(401);
         }
-        $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
+        if(Auth::user()->isAdmin())
+        {
+            $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
 
-        return view('admin.users.create', compact('roles'));
+            return view('admin.users.create', compact('roles'));
+        }
+
+        if(Auth::user()->isLandlord())
+        {
+            $house= House::findOrFail(Auth::user()->id);
+            return view('landlord.users.create', compact('house'));
+        }
     }
 
     /**
      * Store a newly created User in storage.
      *
-     * @param  \App\Http\Requests\StoreUsersRequest  $request
+     * @param  \App\Http\Requests\StoreUsersRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreUsersRequest $request)
     {
-        if (! Gate::allows('user_create')) {
+        if (! Gate::allows('user_create'))
+        {
             return abort(401);
         }
-        $user = User::create($request->all());
+        if(Auth::user()->isAdmin()){
+            $user = User::create($request->all());
 
 
+            return redirect()->route('admin.users.index');
+        }
 
-        return redirect()->route('admin.users.index');
+        if(Auth::user()-isLandlord()){
+            $user = User::create($request->all());
+            $house->tenant_id = $user->id;
+            $house->upgate();
+
+            return redirect()->back();
+        }
+
     }
 
 
     /**
      * Show the form for editing User.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (! Gate::allows('user_edit')) {
+        if (! Gate::allows('user_edit'))
+        {
             return abort(401);
         }
         $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
@@ -82,18 +107,18 @@ class UsersController extends Controller
     /**
      * Update User in storage.
      *
-     * @param  \App\Http\Requests\UpdateUsersRequest  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\UpdateUsersRequest $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateUsersRequest $request, $id)
     {
-        if (! Gate::allows('user_edit')) {
+        if (! Gate::allows('user_edit'))
+        {
             return abort(401);
         }
         $user = User::findOrFail($id);
         $user->update($request->all());
-
 
 
         return redirect()->route('admin.users.index');
@@ -103,15 +128,20 @@ class UsersController extends Controller
     /**
      * Display User.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        if (! Gate::allows('user_view')) {
+        if (! Gate::allows('user_view'))
+        {
             return abort(401);
         }
-        $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');$houses = \App\House::where('landlord_id', $id)->get();$houses = \App\House::where('tenant_id', $id)->get();$messages = \App\Message::where('user_id', $id)->get();$messages = \App\Message::where('created_by_id', $id)->get();
+        $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
+        $houses = \App\House::where('landlord_id', $id)->get();
+        $houses = \App\House::where('tenant_id', $id)->get();
+        $messages = \App\Message::where('user_id', $id)->get();
+        $messages = \App\Message::where('created_by_id', $id)->get();
 
         $user = User::findOrFail($id);
 
@@ -122,18 +152,21 @@ class UsersController extends Controller
     /**
      * Remove User from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if (! Gate::allows('user_delete')) {
+        if (! Gate::allows('user_delete'))
+        {
             return abort(401);
         }
-        $user = User::findOrFail($id);
-        $user->delete();
 
-        return redirect()->route('admin.users.index');
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return redirect()->route('admin.users.index');
+
     }
 
     /**
@@ -143,13 +176,16 @@ class UsersController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (! Gate::allows('user_delete')) {
+        if (! Gate::allows('user_delete'))
+        {
             return abort(401);
         }
-        if ($request->input('ids')) {
+        if ($request->input('ids'))
+        {
             $entries = User::whereIn('id', $request->input('ids'))->get();
 
-            foreach ($entries as $entry) {
+            foreach ($entries as $entry)
+            {
                 $entry->delete();
             }
         }

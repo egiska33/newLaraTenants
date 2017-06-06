@@ -181,7 +181,6 @@ class HousesController extends Controller {
 
             $house = House::findOrFail($id);
             $tenant = User::Where('id', $house->tenant_id)->get();
-//            dd(empty($tenant));
             return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks', 'tenant'));
         }
         if($user->isTenant()){

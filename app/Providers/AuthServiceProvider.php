@@ -55,16 +55,16 @@ class AuthServiceProvider extends ServiceProvider
             return in_array($user->role_id, [1]);
         });
         Gate::define('user_create', function ($user) {
-            return in_array($user->role_id, [1]);
+            return in_array($user->role_id, [1, 2]);
         });
         Gate::define('user_edit', function ($user) {
-            return in_array($user->role_id, [1]);
+            return in_array($user->role_id, [1, 2]);
         });
         Gate::define('user_view', function ($user) {
-            return in_array($user->role_id, [1]);
+            return in_array($user->role_id, [1, 2]);
         });
         Gate::define('user_delete', function ($user) {
-            return in_array($user->role_id, [1]);
+            return in_array($user->role_id, [1, 2]);
         });
 
         // Auth gates for: House
