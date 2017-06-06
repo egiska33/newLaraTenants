@@ -1,15 +1,30 @@
-@foreach($houses as $house)
-    {{$house->landlord->name}}
-    <br>
-    {{$house->city}}
-    <br>
-    {{$house->address}}
-    <br>
-    <a href="{{ route('admin.houses.show',[$house->id]) }}">Perziureti</a>
-    <hr>
-@endforeach
-@can('house_create')
+@extends('layouts.landlord')
 
-<a href="{{ route('landlord.houses.create') }}">Prideti nama</a>
+@section('content')
 
-    @endcan
+    <div class="row">
+        @can('house_create')
+            <div class="col-md-12">
+                <a class="btn btn-success" href="{{ route('landlord.houses.create') }}">Create House</a>
+            </div>
+        @endcan
+    </div>
+
+    <div class="row">
+        @foreach($houses as $house)
+            <div class="col-md-3 customContainer">
+                <a class="btn custom @if($house->tenant_id == null) InactiveHouse @else ActiveHouse @endif" href="{{route('view.house')}}">
+                    <div class="houseContainer"><i class="fa fa-university house" aria-hidden="true"></i></div>
+                    <br>
+                    <div class="customText">{{$house->address}}</div>
+                </a>
+            </div>
+        @endforeach
+    </div>
+
+
+@endsection
+
+
+
+

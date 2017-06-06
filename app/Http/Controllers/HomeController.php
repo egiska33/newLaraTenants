@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\House;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,15 +30,15 @@ class HomeController extends Controller
 
         if($user->isAdmin()){
             return view('home');
-
         }
 
         if ($user->isLandlord()){
-            return view ('welcome');
+            $houses = House::where('landlord_id', $user->id)->get();
+            return view('landlord.houses.index', compact('houses'));
         }
 
         if ($user->isTenant()){
-            return view ('welcome');
+            return view('home');
         }
     }
 }

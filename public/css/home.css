@@ -1,6 +1,5 @@
 .custom{
     height: 200px;
-    position: absolute;
     border-radius: 25px !important;
     width: -webkit-fill-available;
 }
@@ -28,5 +27,5 @@
     margin-top: 80px;
 }
 .customContainer{
-    margin: 0 39px
+    margin: 39px
 }
