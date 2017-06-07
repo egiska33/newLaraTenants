@@ -61,7 +61,7 @@ class UsersController extends Controller {
      * @param  \App\Http\Requests\StoreUsersRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUsersRequest $request)
+    public function store(StoreUsersRequest $request,$house)
     {
         if (! Gate::allows('user_create'))
         {
@@ -74,10 +74,12 @@ class UsersController extends Controller {
             return redirect()->route('admin.users.index');
         }
 
-        if(Auth::user()-isLandlord()){
+        if(Auth::user()->isLandlord()){
+            dd($house);
+
             $user = User::create($request->all());
             $house->tenant_id = $user->id;
-            $house->upgate();
+            $house->update();
 
             return redirect()->back();
         }

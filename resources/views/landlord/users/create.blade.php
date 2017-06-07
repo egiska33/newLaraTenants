@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="text" name="phone" id="phone" class="form-control input-sm" placeholder="Phone">
+                                        <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last_name">
                                     </div>
                                 </div>
                             </div>
@@ -33,12 +33,18 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                        <input   type="hidden" name="role_id" value="3" class="form-control input-sm" placeholder="Role">
+                                        <input type="text" name="phone" id="phone" class="form-control input-sm" placeholder="Phone">
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="password" name="password"  class="form-control input-sm" placeholder="Password">
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="password" name="password"  class="form-control input-sm" placeholder="Password">
+                                        <input   type="hidden" name="role_id" value="3" class="form-control input-sm" placeholder="Role">
                                     </div>
                                 </div>
                             </div>
