@@ -164,10 +164,22 @@ class UsersController extends Controller {
             return abort(401);
         }
 
+        if(Auth::user()->isAdmin()){
             $user = User::findOrFail($id);
             $user->delete();
 
             return redirect()->route('admin.users.index');
+        }
+
+        if(Auth::user()->isLandlord()){
+            $user = User::findOrFail($id);
+//            dd($user);
+
+
+            $user->delete();
+
+            return redirect()->route('view.house');
+        }
 
     }
 

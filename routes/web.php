@@ -45,4 +45,5 @@ Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
     Route::get('houses/{id}', 'Admin\HousesController@show')->name('landlord.house.show');
     Route::get('house/{id}/create', 'Admin\UsersController@create')->name('landlord.tenant.create');
     Route::post('house/{id}/create', 'Admin\UsersController@store')->name('landlord.tenants.store');
+    Route::get('houses/update/{id}', 'ProfileController@update')->name('delete.tenant');
 });
