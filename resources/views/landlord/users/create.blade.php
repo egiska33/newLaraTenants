@@ -10,7 +10,7 @@
                         <h3 class="panel-title">Please add tenant for house </h3>
                     </div>
                     <div class="panel-body">
-                        <form  action="{{route('landlord.tenants.store',$house->id)}}" method="post" role="form">
+                        <form  action="{{route('tenants.store',$house->id)}}" method="post" role="form">
                             {{ csrf_field() }}
 
                             <div class="row">

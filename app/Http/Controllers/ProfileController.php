@@ -19,4 +19,12 @@ class ProfileController extends Controller {
         return redirect()->route('view.house');
 
     }
+
+    public function addTeant(Request $request, $id){
+        dd($id);
+    }
+
+    public function create(){
+
+    }
 }
