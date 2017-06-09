@@ -10,14 +10,15 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller {
 
-    public function update($id)
+    public function update($id,$tenant)
     {
 
+        $user = User::findOrFail($tenant);
 
         $house = House::findOrFail($id);
         $house->tenant_id = null;
         $house->update();
-
+        $user->delete();
         return redirect()->route('view.house');
 
     }

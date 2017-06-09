@@ -57,7 +57,7 @@
 
             @can('bill_access')
                 <li class="{{ $request->segment(2) == 'bills' ? 'active' : '' }}">
-                    <a href="">
+                    <a href="{{route('show.bill', $house->id)}}">
                         <i class="fa fa-cc-mastercard"></i>
                         <span class="title">@lang('quickadmin.bill.title')</span>
                     </a>

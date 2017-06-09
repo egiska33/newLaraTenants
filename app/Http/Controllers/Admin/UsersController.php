@@ -41,16 +41,17 @@ class UsersController extends Controller {
         {
             return abort(401);
         }
-        if(Auth::user()->isAdmin())
+        if (Auth::user()->isAdmin())
         {
             $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
 
             return view('admin.users.create', compact('roles'));
         }
 
-        if(Auth::user()->isLandlord())
+        if (Auth::user()->isLandlord())
         {
-            $house= House::findOrFail(Auth::user()->id);
+            $house = House::findOrFail(Auth::user()->id);
+
             return view('landlord.users.create', compact('house'));
         }
     }
@@ -61,20 +62,22 @@ class UsersController extends Controller {
      * @param  \App\Http\Requests\StoreUsersRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUsersRequest $request,$house)
+    public function store(StoreUsersRequest $request, $house)
     {
         if (! Gate::allows('user_create'))
         {
             return abort(401);
         }
-        if(Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin())
+        {
             $user = User::create($request->all());
 
 
             return redirect()->route('admin.users.index');
         }
 
-        if(Auth::user()->isLandlord()){
+        if (Auth::user()->isLandlord())
+        {
             dd($house);
 
             $user = User::create($request->all());
@@ -139,15 +142,26 @@ class UsersController extends Controller {
         {
             return abort(401);
         }
-        $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
-        $houses = \App\House::where('landlord_id', $id)->get();
-        $houses = \App\House::where('tenant_id', $id)->get();
-        $messages = \App\Message::where('user_id', $id)->get();
-        $messages = \App\Message::where('created_by_id', $id)->get();
+        if (Auth::user()->isAdmin())
+        {
+            $roles = \App\Role::get()->pluck('title', 'id')->prepend('Please select', '');
+            $houses = \App\House::where('landlord_id', $id)->get();
+            $houses = \App\House::where('tenant_id', $id)->get();
+            $messages = \App\Message::where('user_id', $id)->get();
+            $messages = \App\Message::where('created_by_id', $id)->get();
 
-        $user = User::findOrFail($id);
+            $user = User::findOrFail($id);
 
-        return view('admin.users.show', compact('user', 'houses', 'houses', 'messages', 'messages'));
+            return view('admin.users.show', compact('user', 'houses', 'houses', 'messages', 'messages'));
+        }
+
+        if(Auth::user()->isLandlord())
+        {
+            $user = User::findOrFail($id);
+
+            return view('landlord.users.show', compact('user'));
+        }
+
     }
 
 
@@ -164,17 +178,17 @@ class UsersController extends Controller {
             return abort(401);
         }
 
-        if(Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin())
+        {
             $user = User::findOrFail($id);
             $user->delete();
 
             return redirect()->route('admin.users.index');
         }
 
-        if(Auth::user()->isLandlord()){
+        if (Auth::user()->isLandlord())
+        {
             $user = User::findOrFail($id);
-//            dd($user);
-
 
             $user->delete();
 
