@@ -6,6 +6,7 @@ use App\Document;
 use App\House;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentsController extends Controller {
 
@@ -16,5 +17,15 @@ class DocumentsController extends Controller {
         $house = House::where('id', $id)->first();
 
         return view('landlord.documents.index', compact('documents', 'house'));
+    }
+
+    public function all(){
+        $user = Auth::user();
+        if ($user->isLandlord()){
+            $house = House::where('landlord_id', $user->id)->pluck('id');
+            $documents = Document::whereIn('house_id', $house)->get();
+
+            return view('landlord.documents.all', compact('documents'));
+        }
     }
 }

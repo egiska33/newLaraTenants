@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 
 @section('content')
 
@@ -13,7 +13,7 @@
     <div class="row">
         @foreach($houses as $house)
             <div class="col-md-3 customContainer">
-                <a class="btn custom @if($house->tenant_id == null) InactiveHouse @else ActiveHouse @endif" href="{{route('landlord.house.show',$house->id)}}">
+                <a class="btn custom @if($house->tenant_id == null) InactiveHouse @else ActiveHouse @endif" href="{{route('show.landlord.house',$house->id)}}">
                     <div class="houseContainer"><i class="fa fa-university house" aria-hidden="true"></i></div>
                     <br>
                     <div class="customText">{{$house->address}}</div>

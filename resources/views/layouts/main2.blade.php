@@ -28,11 +28,12 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{route('show.landlord.house',$house->id)}}">House</a></li>
-                    <li><a href="{{route('show.landlord.bill', $house->id)}}">Bills</a></li>
-                    <li><a href="{{route('show.landlord.task', $house->id)}}">Tasks</a></li>
-                    <li><a href="{{route('show.landlord.message', $house->id)}}">Messages</a></li>
-                    <li><a href="{{route('show.landlord.document', $house->id)}}">Documents</a></li>
+                    <li><a href="{{route('view.house')}}">House</a></li>
+                    <li><a href="{{route('show.landlord.tenants')}}">Tenants</a></li>
+                    <li><a href="{{route('show.landlord.bills')}}">Bills</a></li>
+                    <li><a href="{{route('show.landlord.tasks')}}">Tasks</a></li>
+                    <li><a href="{{route('show.landlord.messages')}}">Messages</a></li>
+                    <li><a href="{{route('show.landlord.documents')}}">Documents</a></li>
 
                 </ul>
 

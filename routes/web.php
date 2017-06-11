@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
     Route::get('/houses', 'Admin\HousesController@index')->name('view.house');
     Route::get('/houses/create', 'Admin\HousesController@create')->name('landlord.houses.create');
     Route::post('/houses/store', 'Admin\HousesController@store')->name('landlord.houses.store');
-    Route::get('houses/{id}', 'Admin\HousesController@show')->name('landlord.house.show');
+    Route::get('houses/{id}', 'Admin\HousesController@show')->name('show.landlord.house');
     Route::get('house/{id}/create', 'ProfileController@create')->name('landlord.tenant.create');
     Route::post('house/{id}/create', 'ProfileController@addTenant')->name('tenants.store');
     Route::get('houses/update/{id}/delete/{tenant}', 'ProfileController@update')->name('delete.tenant');
@@ -51,4 +51,9 @@ Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
     Route::get('houses/{id}/tasks', 'Landlord\TasksController@index')->name('show.landlord.task');
     Route::get('houses/{id}/messages', 'Landlord\MessagesController@index')->name('show.landlord.message');
     Route::get('houses/{id}/documents', 'Landlord\DocumentsController@index')->name('show.landlord.document');
+    Route::get('/tenants', 'Landlord\TenantsController@all')->name('show.landlord.tenants');
+    Route::get('/bills', 'Landlord\BillsController@all')->name('show.landlord.bills');
+    Route::get('/messages', 'Landlord\MessagesController@all')->name('show.landlord.messages');
+    Route::get('tasks', 'Landlord\TasksController@all')->name('show.landlord.tasks');
+    Route::get('documents', 'Landlord\DocumentsController@all')->name('show.landlord.documents');
 });
