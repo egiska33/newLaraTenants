@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @foreach($bills as $bill)
+    @foreach($tasks as $task)
 
-        {{$bill->type}}{{$bill->total}}
+        {{$task->content}}{{$task->created_at}}
         <br>
 
     @endforeach
