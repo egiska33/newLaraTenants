@@ -47,5 +47,5 @@ Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
     Route::post('house/{id}/create', 'ProfileController@addTenant')->name('tenants.store');
     Route::get('houses/update/{id}/delete/{tenant}', 'ProfileController@update')->name('delete.tenant');
     Route::get('houses/tenant/{id}', 'Admin\UsersController@show')->name('show.tenant');
-    Route::get('houses/{id}/bills', 'Admin\BillsController@show')->name('show.bill');
+    Route::get('houses/{id}/bills', 'Landlord\BillsController@index')->name('show.landlord.bill');
 });

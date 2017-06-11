@@ -33,16 +33,16 @@
                                 </a>
                             </li>
                         @endcan
-                        {{--@can('user_access')--}}
-                            {{--<li class="{{ $request->segment(2) == 'users' ? 'active active-sub' : '' }}">--}}
-                                {{--<a href="">--}}
-                                    {{--<i class="fa fa-user"></i>--}}
-                                    {{--<span class="title">--}}
-                                {{--@lang('quickadmin.users.title')--}}
-                            {{--</span>--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                        {{--@endcan--}}
+                        @can('user_access')
+                            <li class="{{ $request->segment(2) == 'users' ? 'active active-sub' : '' }}">
+                                <a href="">
+                                    <i class="fa fa-user"></i>
+                                    <span class="title">
+                                @lang('quickadmin.users.title')
+                            </span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcan
@@ -57,7 +57,7 @@
 
             @can('bill_access')
                 <li class="{{ $request->segment(2) == 'bills' ? 'active' : '' }}">
-                    <a href="{{route('show.bill', $house->id)}}">
+{{--                    <a href="{{route('show.landlord.bill', $house->id)}}">--}}
                         <i class="fa fa-cc-mastercard"></i>
                         <span class="title">@lang('quickadmin.bill.title')</span>
                     </a>
