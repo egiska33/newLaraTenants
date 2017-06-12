@@ -4,7 +4,7 @@
     @if(!$tenants->isEmpty())
 
         @foreach($tenants as $tenant)
-            <b> {{$tenant->name}}:</b>
+            <a href="{{route('show.tenant.house', $tenant->id)}}"><b> {{$tenant->name}}:</b></a>
             <br>
             {{$tenant->email}}{{$tenant->phone}}
             <hr>

@@ -15,9 +15,8 @@ class TenantsController extends Controller {
         $user = Auth::user();
         if ($user->isLandlord())
         {
-            $house = House::where('landlord_id', $user->id)->pluck('tenant_id');
-            $tenants = User::whereIn('id', $house)->get();
-
+            $houses = House::where('landlord_id', $user->id)->pluck('tenant_id','id');
+            $tenants = User::whereIn('id', $houses)->get();
             return view('landlord.tenants.all', compact('tenants'));
         }
     }
