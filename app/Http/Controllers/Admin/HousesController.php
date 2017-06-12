@@ -180,8 +180,8 @@ class HousesController extends Controller {
             $tasks = \App\Task::where('house_id', $id)->get();
 
             $house = House::findOrFail($id);
-            $tenant = User::Where('id', $house->tenant_id)->get();
-            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks', 'tenant'));
+            $users = User::Where('id', $house->tenant_id)->get();
+            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks', 'users'));
         }
         if($user->isTenant()){
             $messages = \App\Message::where('house_id', $id)->get();
@@ -190,8 +190,9 @@ class HousesController extends Controller {
             $tasks = \App\Task::where('house_id', $id)->get();
 
             $house = House::findOrFail($id);
+            $users = User::Where('id', $house->landlord_id)->get();
 
-            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks'));
+            return view('landlord.houses.show', compact('house','messages', 'documents', 'bills', 'tasks', 'users'));
         }
 
     }

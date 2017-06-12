@@ -20,9 +20,15 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ route('view.house') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+                @if(Auth::user()->isLandlord())
+                    <a class="navbar-brand" href="{{ route('view.house') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                @else
+                    <a class="navbar-brand" href="{{ route('show.landlord.house', $house->id)}}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                @endif
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -35,7 +41,6 @@
                     <li><a href="{{route('show.landlord.document', $house->id)}}">Documents</a></li>
 
                 </ul>
-
 
 
                 <!-- Right Side Of Navbar -->

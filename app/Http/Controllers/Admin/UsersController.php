@@ -162,6 +162,13 @@ class UsersController extends Controller {
             return view('landlord.users.show', compact('user'));
         }
 
+        if(Auth::user()->isTenant())
+        {
+            $user = User::findOrFail($id);
+
+            return view('landlord.users.show', compact('user'));
+        }
+
     }
 
 
