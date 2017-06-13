@@ -28,4 +28,10 @@ class DocumentsController extends Controller {
             return view('landlord.documents.all', compact('documents'));
         }
     }
+
+    public function show($id, $document_id){
+        $document = Document::findOrFail($document_id);
+        $house = House::findOrFail($id);
+        return view('landlord.documents.show', compact('document', 'house'));
+    }
 }
