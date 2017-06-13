@@ -199,3 +199,6 @@ body {
 .forgot-password:focus{
     color: #004e99;
 }
+.userCard:hover{
+    background-color: #1a242f;
+}
