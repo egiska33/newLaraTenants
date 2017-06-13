@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Landlord;
 
 use App\House;
+use App\Http\Requests\Admin\StoreMessagesRequest;
 use App\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,5 +28,12 @@ class MessagesController extends Controller {
 
             return view('landlord.messages.all', compact('messages'));
         }
+    }
+
+    public function store(StoreMessagesRequest $request,$id)
+    {
+        $message = Message::create($request->all());
+        $home = House::findOrFail($id);
+        return redirect()->route('show.landlord.message', compact('home'));
     }
 }

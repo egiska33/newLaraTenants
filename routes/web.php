@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=> 'landlord' ], function (){
     Route::get('houses/{id}/bills', 'Landlord\BillsController@index')->name('show.landlord.bill');
     Route::get('houses/{id}/tasks', 'Landlord\TasksController@index')->name('show.landlord.task');
     Route::get('houses/{id}/messages', 'Landlord\MessagesController@index')->name('show.landlord.message');
+    Route::post('houses/{id}/messages', 'Landlord\MessagesController@store')->name('landlord.messages.store');
     Route::get('houses/{id}/documents', 'Landlord\DocumentsController@index')->name('show.landlord.document');
     Route::get('/tenants', 'Landlord\TenantsController@all')->name('show.landlord.tenants');
     Route::get('/bills', 'Landlord\BillsController@all')->name('show.landlord.bills');
